@@ -80,8 +80,6 @@ public class ServerSocketTask implements Runnable {
                 in.close();
             } 
             else if(request.getOperationType().equals("login")) {
-                
-
                 if(request.getUserInfo() != null) {
                     String loginUserName = request.getUserInfo().getUserName();
                     String loginPassword = request.getUserInfo().getPassword();
@@ -127,7 +125,6 @@ public class ServerSocketTask implements Runnable {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-        
                         if(request.getOperationType().equals("join")) {
                             if(joinState == 0) {
                                 System.out.println("User " + loggedUser.getUserName() + " asked to join");
@@ -153,11 +150,8 @@ public class ServerSocketTask implements Runnable {
                                 reply = new Reply(message);
                                 out.writeObject(reply);
                                 out.flush();
-                            }
-
-                            
+                            }   
                         }
-    
                         if(request.getOperationType().equals("exit")) {
                             System.out.println("User " + loggedUser.getUserName() + " asked to exit");
                             break;
