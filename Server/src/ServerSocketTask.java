@@ -130,7 +130,7 @@ public class ServerSocketTask implements Runnable {
         
                         if(request.getOperationType().equals("join")) {
                             if(joinState == 0) {
-                                System.out.println("User asked to join");
+                                System.out.println("User " + loggedUser.getUserName() + " asked to join");
                                 joinState = 1;
                                 message = "Successfully joined";
                                 try {
@@ -159,7 +159,7 @@ public class ServerSocketTask implements Runnable {
                         }
     
                         if(request.getOperationType().equals("exit")) {
-                            System.out.println("User asked to exit");
+                            System.out.println("User " + loggedUser.getUserName() + " asked to exit");
                             break;
                         }
                     }
