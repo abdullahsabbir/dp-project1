@@ -88,7 +88,6 @@ public class ServerSocketTask implements Runnable {
                             System.out.println("User " + loginUserName + " login approved.");
                             System.out.println("Waiting for next command...");
                             message = "loginSuccess";
-                            // loggedUser = new UserInfo(loginUserName, loginPassword);
 
                         } else {
                             System.out.println("User " + loginUserName + " entered wrong password.");
@@ -162,26 +161,6 @@ public class ServerSocketTask implements Runnable {
                     out.writeObject(reply);
                     out.flush();
                 }
-                
-                
-
-                
-
-                // try {
-                //     this.request = (Request) in.readObject();
-                // } catch (ClassNotFoundException e) {
-                //     e.printStackTrace();
-                // }
-
-                // if(request.getOperationType().equals("join")) {
-                //     System.out.println("User asked to join");
-
-                //     message = "Successfully joined";
-                //     reply = new Reply(message);
-                //     out.writeObject(reply);
-                //     out.flush();
-                //     //TODO Add Future Game Features
-                // }
                 
                 out.close();
                 in.close();

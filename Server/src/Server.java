@@ -21,8 +21,6 @@ public class Server {
             connection = serverSocket.accept();
             ServerSocketTask serverTask = new ServerSocketTask(connection, usersMap);
             serverThreadExecutor.execute(serverTask);
-
-            // connection.close();
         }
     }
 }
