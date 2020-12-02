@@ -33,7 +33,9 @@ public class ClientSocketTask implements Runnable {
             connection = new Socket(ip, port);
             System.out.println("Connected! Server info: " + connection);
 
+            // Task for registration
             if(request.getOperationType().equals("register")) {
+                // Output Stream
                 OutputStream outputStream = connection.getOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(outputStream);
                 
@@ -41,6 +43,7 @@ public class ClientSocketTask implements Runnable {
                 out.writeObject(this.request);
                 out.flush();
 
+                // Input Stream
                 InputStream inputStream = connection.getInputStream();
                 ObjectInputStream in = new ObjectInputStream(inputStream);
 
@@ -55,7 +58,9 @@ public class ClientSocketTask implements Runnable {
                 out.close();
             }
 
+            // Task for login
             if(request.getOperationType().equals("login")) {
+                // Output Stream
                 OutputStream outputStream = connection.getOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(outputStream);
                 
@@ -63,6 +68,7 @@ public class ClientSocketTask implements Runnable {
                 out.writeObject(this.request);
                 out.flush();
 
+                // Input Stream
                 InputStream inputStream = connection.getInputStream();
                 ObjectInputStream in = new ObjectInputStream(inputStream);
 
@@ -72,10 +78,11 @@ public class ClientSocketTask implements Runnable {
                     e.printStackTrace();
                 }
 
+                // Task when login is successful
                 if(reply.getMessage().equals("loginSuccess")) {
                     System.out.println("Login Successful");
-                    // Scanner scanner = new Scanner(System.in);
                     while(true) {
+                        // Prompts after login is successful
                         int input;
                         System.out.println("Welcome " + reply.getUserInfo().getUserName());
                         System.out.println("Available Commands:");
@@ -88,6 +95,7 @@ public class ClientSocketTask implements Runnable {
                             input = scanner.nextInt();
                             if(input != 0) {
                                 if(input == 1) {
+                                    // Prompt and task for joining a game
                                     request = new Request("join");
                                     System.out.println("Sending your information to the server...");
                                     out.writeObject(this.request);
@@ -102,8 +110,8 @@ public class ClientSocketTask implements Runnable {
                                     System.out.println("Invalid Command. Please enter the number of the command");
                                 }
                             } else {
+                                // Task after client tried to exit joined state
                                 request = new Request("exit");
-                                // System.out.println("Sending your information to the server...");
                                 out.writeObject(this.request);
                                 out.flush();
                                 break;
@@ -119,10 +127,6 @@ public class ClientSocketTask implements Runnable {
 
                 in.close();
                 out.close();
-
-                // System.out.println("Server reply: " + reply);
-
-
             }
 
         } catch(IOException e) {

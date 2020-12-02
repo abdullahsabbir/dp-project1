@@ -1,4 +1,3 @@
-// import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Client {
@@ -22,6 +21,7 @@ public class Client {
 
                 if(input != 0) {
                     if(input == 1) {
+                        // Prompt for when Client wants to register
                         System.out.println("Please enter Username");
                         userName = scanner.next();
                         
@@ -34,6 +34,7 @@ public class Client {
                         ClientSocketTask clientsocket = new ClientSocketTask(request);
                         clientsocket.run();
                     } else if(input == 2) {
+                        // Prompt for when Client wants to Login
                         System.out.println("Please enter Username");
                         userName = scanner.next();
                         
