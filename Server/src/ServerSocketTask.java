@@ -12,10 +12,12 @@ public class ServerSocketTask implements Runnable {
     private Reply reply;
     private UserInfo userInfo;
     private HashMap<String, UserInfo> usersMap = new HashMap<>();
+    private HashMap<String, UserInfo> loggedUsersList = new HashMap<>();
 
-    public ServerSocketTask(Socket socket, HashMap<String, UserInfo> usersMap) {
+    public ServerSocketTask(Socket socket, HashMap<String, UserInfo> usersMap, HashMap<String, UserInfo> loggedUsersList) {
         this.connection = socket;
         this.usersMap = usersMap;
+        this.loggedUsersList = loggedUsersList;
     }
 
     @Override
@@ -94,18 +96,23 @@ public class ServerSocketTask implements Runnable {
                     String loginPassword = request.getUserInfo().getPassword();
                     // Checking if the user credentials are correct
                     if(usersMap.containsKey(loginUserName)) {
-                        if(usersMap.get(loginUserName).getPassword().equals(loginPassword)) {
-                            System.out.println("User " + loginUserName + " login approved.");
-                            System.out.println("Waiting for next command...");
-                            message = "loginSuccess";
-
+                        // Checking if the user is already logged in another session
+                        if(!loggedUsersList.containsKey(loginUserName)) {
+                            // Checking if the password is correct
+                            if(usersMap.get(loginUserName).getPassword().equals(loginPassword)) {
+                                System.out.println("User " + loginUserName + " login approved.");
+                                System.out.println("Waiting for next command...");
+                                // Adding the user to the logged in users list
+                                loggedUsersList.put(loginUserName, request.getUserInfo());
+                                message = "loginSuccess";
+                            } else {
+                                System.out.println("User " + loginUserName + " entered wrong password.");
+                                message = "Wrong password entered. Please try again.";
+                            }
                         } else {
-                            System.out.println("User " + loginUserName + " entered wrong password.");
-                            message = "Wrong password entered. Please try again.";
+                            System.out.println("User " + loginUserName + " is already logged in another session.");
+                            message = loginUserName + " is already logged in another session";
                         }
-
-                        userInfo = new UserInfo(loginUserName, loginPassword);
-                        usersMap.put(loginUserName, userInfo);
                     } else {
                         System.out.println("The username " + loginUserName + " doesn't exist. Aborting operation.");
                         message = "The username " + loginUserName + " doesn't exist. Please enter valid credentials and try again.";
@@ -131,7 +138,6 @@ public class ServerSocketTask implements Runnable {
                     reply = new Reply(loggedUser, message);
                     out.writeObject(reply);
                     out.flush();
-                    int joinState = 0;
                     while(true) {
                         try {
                             this.request = (Request) in.readObject();
@@ -140,36 +146,22 @@ public class ServerSocketTask implements Runnable {
                         }
                         // Task when user wants to join a game
                         if(request.getOperationType().equals("join")) {
-                            // Checking if the user is already connected in another session
-                            if(joinState == 0) {
-                                System.out.println("User " + loggedUser.getUserName() + " asked to join");
-                                joinState = 1;
-                                message = "Successfully joined";
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                reply = new Reply(message);
-                                out.writeObject(reply);
-                                out.flush();
-                                //TODO Add Future Game Features
-                            } else {
-                                System.out.println("User already joined");
-                                message = "Already joined";
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                reply = new Reply(message);
-                                out.writeObject(reply);
-                                out.flush();
-                            }   
+                            System.out.println("User " + loggedUser.getUserName() + " asked to join");
+                            message = "Successfully joined";
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            reply = new Reply(message);
+                            out.writeObject(reply);
+                            out.flush();
+                            //TODO Add Future Game Features  
                         }
                         // Task when user want to exit the joined session
                         if(request.getOperationType().equals("exit")) {
                             System.out.println("User " + loggedUser.getUserName() + " asked to exit");
+                            loggedUsersList.remove(loggedUser.getUserName());
                             break;
                         }
                     }

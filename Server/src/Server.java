@@ -9,6 +9,7 @@ public class Server {
     private static Socket connection;
     private static ServerSocket serverSocket;
     private static HashMap<String, UserInfo> usersMap = new HashMap<>();
+    private static HashMap<String, UserInfo> loggedUsersList = new HashMap<>();
     private static ExecutorService serverThreadExecutor = Executors.newFixedThreadPool(10);
 
     public static void main(String args[]) throws IOException {
@@ -19,7 +20,7 @@ public class Server {
             System.out.println("Waiting for connection...");
 
             connection = serverSocket.accept();
-            ServerSocketTask serverTask = new ServerSocketTask(connection, usersMap);
+            ServerSocketTask serverTask = new ServerSocketTask(connection, usersMap, loggedUsersList);
             serverThreadExecutor.execute(serverTask);
         }
     }
