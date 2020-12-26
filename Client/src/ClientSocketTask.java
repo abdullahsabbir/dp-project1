@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ClientSocketTask implements Runnable {
     private Socket connection;
-    private int port = 1234;
+    private int port = 1000;
     private String ip = "localhost";
 
     private Request request;
@@ -16,6 +16,7 @@ public class ClientSocketTask implements Runnable {
     private Reply joinReply;
 
     private Scanner scanner;
+    private String gameLine;
 
     public ClientSocketTask(Request request) {
         this.request = request;
@@ -84,6 +85,7 @@ public class ClientSocketTask implements Runnable {
                     while(true) {
                         // Prompts after login is successful
                         int input;
+                        String stringInput;
                         System.out.println("Welcome " + reply.getUserInfo().getUserName());
                         System.out.println("Available Commands:");
                         System.out.println("1   Join");
@@ -97,7 +99,7 @@ public class ClientSocketTask implements Runnable {
                                 if(input == 1) {
                                     // Prompt and task for joining a game
                                     request = new Request("join");
-                                    System.out.println("Sending your information to the server...");
+                                    System.out.println("Teaming up with another player...");
                                     out.writeObject(this.request);
                                     out.flush();
                                     try {
@@ -106,6 +108,69 @@ public class ClientSocketTask implements Runnable {
                                         e.printStackTrace();
                                     }
                                     System.out.println(joinReply);
+                                    stringInput = scanner.next();
+                                    if(stringInput.equals("yes")) {
+                                        request = new Request("ready");
+                                        out.writeObject(this.request);
+                                        out.flush();
+                                        System.out.println("Waiting for the other player to be ready...");
+                                    }
+
+                                    int startCounter = 0;
+                                    while(true) {
+                                        try {
+                                            joinReply = (Reply) in.readObject();
+                                        } catch (ClassNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if(joinReply.toString().equals("START")) {
+                                            System.out.println("in start");
+                                            startCounter = 1;
+                                            continue;
+                                        }
+                                        if(joinReply.toString().equals("END")) {
+                                            break;
+                                        } else if(startCounter == 1) {
+                                            this.gameLine = joinReply.toString();
+                                            startCounter = 0;
+                                            System.out.println(this.gameLine);
+                                        } else {
+                                            System.out.println(joinReply);
+                                        }
+                                    }
+
+                                    scanner.nextLine();
+                                    stringInput = scanner.nextLine();
+                                    // System.out.println(gameLine);
+                                    System.out.println("Input: " + stringInput);
+                                    if(this.gameLine.equals(stringInput)) {
+                                        System.out.println("Waiting for server to finish up...");
+                                        request = new Request("done");
+                                        out.writeObject(this.request);
+                                        out.flush();
+                                    } else {
+                                        System.out.println("Your input didn't match. So, you're disqualified");
+                                        request = new Request("disqualified");
+                                        out.writeObject(this.request);
+                                        out.flush();
+                                    }
+
+                                    while(true) {
+                                        try {
+                                            joinReply = (Reply) in.readObject();
+                                        } catch (ClassNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if(joinReply.toString().equals("END")) {
+                                            break;
+                                        }
+                                        System.out.println(joinReply);
+
+                                    }
+
+                                    break;
+
                                 } else {
                                     System.out.println("Invalid Command. Please enter the number of the command");
                                 }
