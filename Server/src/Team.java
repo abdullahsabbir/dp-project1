@@ -38,10 +38,8 @@ public class Team {
     public int getPlayerNumber(UserInfo player) {
         if(player.getUserName().equals(this.player1.getUserName())) {
             return 1;
-        } else if(player.getUserName().equals(this.player2.getUserName())) {
-            return 2;
         } else {
-            return 0;
+            return 2;
         }
     }
 
