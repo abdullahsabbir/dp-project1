@@ -124,7 +124,6 @@ public class ClientSocketTask implements Runnable {
                                             e.printStackTrace();
                                         }
                                         if(joinReply.toString().equals("START")) {
-                                            System.out.println("in start");
                                             startCounter = 1;
                                             continue;
                                         }
@@ -141,8 +140,6 @@ public class ClientSocketTask implements Runnable {
 
                                     scanner.nextLine();
                                     stringInput = scanner.nextLine();
-                                    // System.out.println(gameLine);
-                                    System.out.println("Input: " + stringInput);
                                     if(this.gameLine.equals(stringInput)) {
                                         System.out.println("Waiting for server to finish up...");
                                         request = new Request("done");

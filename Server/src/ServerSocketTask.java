@@ -14,7 +14,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-// import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -28,7 +27,6 @@ public class ServerSocketTask implements Runnable {
     final Object monitor;
     private String teamId;
     private int playerNumber;
-    private int otherPlayerNumber;
     private int newRecordStatus;
     private UserInfo otherPlayer;
     private String leaderboardText;
@@ -110,8 +108,6 @@ public class ServerSocketTask implements Runnable {
     }
 
     private void play(ObjectOutputStream out, ObjectInputStream in, UserInfo player) throws IOException {
-        // OutputStream outputStream = connection.getOutputStream();
-        // ObjectOutputStream out = new ObjectOutputStream(outputStream);
 
         HashMap<String, Double> tempHashMap = new HashMap<>();
 
@@ -162,9 +158,6 @@ public class ServerSocketTask implements Runnable {
         out.writeObject(reply);
         out.flush();
 
-        // InputStream inputStream = connection.getInputStream();
-        // ObjectInputStream in = new ObjectInputStream(inputStream);
-
         long startTime = System.currentTimeMillis();
         try {
             this.request = (Request) in.readObject();
@@ -188,9 +181,6 @@ public class ServerSocketTask implements Runnable {
 
         tempHashMap = sortHashMap(this.recordBoard);
         this.recordBoard = tempHashMap;
-
-        // in.close();
-        // out.close();
     }
 
     private static HashMap<String, Double> sortHashMap(HashMap<String, Double> hashMap) {
@@ -245,9 +235,9 @@ public class ServerSocketTask implements Runnable {
                     message = "Something is wrong. Please try again.";
                 }
 
-                // Waiting the thread for 2 seconds
+                // Waiting the thread for 1 second
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -316,9 +306,9 @@ public class ServerSocketTask implements Runnable {
                     message = "Something is wrong. Please try again.";
                 }
 
-                // Waiting the thread for 2 seconds
+                // Waiting the thread for 1 seconds
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -349,14 +339,6 @@ public class ServerSocketTask implements Runnable {
                             this.teamId = joinTeam(loggedUser);
                             Team myTeam = teamList.get(teamId);
                             this.playerNumber = myTeam.getPlayerNumber(loggedUser);
-
-                            if (this.playerNumber == 1) {
-                                this.otherPlayer = this.teamList.get(teamId).getPlayer2();
-                                this.otherPlayerNumber = 2;
-                            } else if (this.playerNumber == 2) {
-                                this.otherPlayer = this.teamList.get(teamId).getPlayer1();
-                                this.otherPlayerNumber = 1;
-                            }
 
                             message = "You are successfully teamed with " + this.otherPlayer.getUserName()
                                     + "\nAre you ready to play?\nEnter yes when ready";
@@ -403,34 +385,9 @@ public class ServerSocketTask implements Runnable {
                                         }
                                     }
                                 }
-
-                                // synchronized (this.monitor) {
-                                // }
                             }
 
                             System.out.println("Waiting for the other player to be ready...");
-
-                            // while (true) {
-                            // if (this.otherPlayerNumber == 1) {
-                            // while (true) {
-                            // if (this.teamList.get(teamId).getPlayer1ReadyStatus() == 1) {
-                            // break;
-                            // }
-                            // }
-                            // } else {
-                            // while (true) {
-                            // if (this.teamList.get(teamId).getPlayer2ReadyStatus() == 1) {
-                            // break;
-                            // }
-                            // }
-                            // }
-                            // }
-
-                            // out.close();
-                            // in.close();
-
-                            // synchronized (monitor) {
-                            // try {
 
                             if (playerNumber == this.teamList.get(teamId).getStartingPlayer()) {
                                 play(out, in, loggedUser);
@@ -512,92 +469,7 @@ public class ServerSocketTask implements Runnable {
                                 }
                             }
 
-                            // if (playerNumber != this.teamList.get(teamId).getStartingPlayer()) {
-                            // while (true) {
-                            // if (this.teamList.get(teamId).getPlayer1finished() == 1) {
-                            // play(out, in, loggedUser);
-                            // myTeam = this.teamList.get(teamId);
-                            // myTeam.setPlayer2finished(1);
-                            // this.teamList.replace(teamId, myTeam);
-                            // break;
-                            // } else {
-                            // System.out.println("waiting");
-                            // try {
-                            // Thread.sleep(100);
-                            // } catch (InterruptedException e) {
-                            // e.printStackTrace();
-                            // }
-                            // // monitor.wait();
-                            // }
-                            // }
-                            // } else {
-                            // play(out, in, loggedUser);
-                            // // System.out.println("After play");
-                            // myTeam = this.teamList.get(teamId);
-                            // myTeam.setPlayer1finished(1);
-                            // this.teamList.replace(teamId, myTeam);
-                            // // System.out.println("replacing new team");
-
-                            // while (true) {
-                            // if (this.teamList.get(this.teamId).getPlayer2finished() == 1) {
-                            // break;
-                            // } else {
-                            // try {
-                            // Thread.sleep(100);
-                            // } catch (InterruptedException e) {
-                            // e.printStackTrace();
-                            // }
-                            // }
-                            // }
-                            // // monitor.notify();
-
-                            // // System.out.println("after notify");
-                            // // System.out.println(loggedUser.getUserName());
-
-                            // }
-
-                            // } catch (InterruptedException e) {
-                            // e.printStackTrace();
-                            // }
-                            // }
-
-                            // try {
-                            // Thread.sleep(100);
-                            // } catch (InterruptedException e1) {
-                            // e1.printStackTrace();
-                            // }
-
-                            // String leaderboard = "Name Time(s)\n";
-
                             myTeam = this.teamList.get(teamId);
-
-                            // TODO Move somewhere else
-                            // if (playerNumber == 1) {
-                            // myTeam.setPlayer1finished(0);
-                            // this.teamList.replace(teamId, myTeam);
-                            // } else {
-                            // myTeam.setPlayer2finished(0);
-                            // try {
-                            // Thread.sleep(100);
-                            // } catch (InterruptedException e) {
-                            // e.printStackTrace();
-                            // }
-                            // this.teamList.replace(teamId, myTeam);
-                            // }
-
-                            // Place to work on
-                            // synchronized (monitor) {
-                            // try {
-                            
-
-                            // if (this.teamList.get(teamId).getStartingPlayer() == playerNumber) {
-                            //     try {
-                            //         Thread.sleep(5000);
-                            //     } catch (InterruptedException e) {
-                            //         e.printStackTrace();
-                            //     }
-                            // }
-                            // Correction
                             if (this.newRecordStatus == 1) {
                                 reply = new Reply(
                                         "Congratulations! You have set a new record\nHere is the new Record Board");
@@ -609,7 +481,6 @@ public class ServerSocketTask implements Runnable {
                                 leaderboard = leaderboard + entry.getKey() + "            " + entry.getValue() + "\n";
                             }
                             this.leaderboardText = leaderboard;
-
 
                             if (this.playerNumber != this.teamList.get(this.teamId).getStartingPlayer()) {
                                 try {
@@ -627,23 +498,12 @@ public class ServerSocketTask implements Runnable {
                             out.writeObject(reply);
                             out.flush();
 
-                            // try {
-                            // Thread.sleep(1000);
-                            // } catch (InterruptedException e) {
-                            // e.printStackTrace();
-                            // }
                             loggedUsersList.remove(loggedUser.getUserName());
-                            if (playerNumber == 1) {
-                                myTeam = teamList.get(teamId);
-                                myTeam.setPlayer1finished(0);
-                                myTeam.setPlayer1ReadyStatus(0);
-                                this.teamList.replace(teamId, myTeam);
-                            } else {
-                                myTeam = teamList.get(teamId);
-                                myTeam.setPlayer2finished(0);
-                                myTeam.setPlayer2ReadyStatus(0);
-                                this.teamList.replace(teamId, myTeam);
+
+                            if(this.teamList.get(this.teamId).getStartingPlayer() != this.playerNumber) {
+                                this.teamList.remove(teamId);
                             }
+                            this.teamIdForOtherPlayer.clear();
 
                             break;
 
