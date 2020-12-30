@@ -30,6 +30,7 @@ public class ServerSocketTask implements Runnable {
     private int newRecordStatus;
     private UserInfo otherPlayer;
     private String leaderboardText;
+    private int otherPlayerNumber;
     private HashMap<String, UserInfo> usersMap = new HashMap<>();
     private HashMap<String, UserInfo> loggedUsersList = new HashMap<>();
     private HashMap<String, Team> teamList = new HashMap<>();
@@ -339,6 +340,14 @@ public class ServerSocketTask implements Runnable {
                             this.teamId = joinTeam(loggedUser);
                             Team myTeam = teamList.get(teamId);
                             this.playerNumber = myTeam.getPlayerNumber(loggedUser);
+
+                            if (this.playerNumber == 1) {
+                                this.otherPlayer = this.teamList.get(teamId).getPlayer2();
+                                this.otherPlayerNumber = 2;
+                            } else if (this.playerNumber == 2) {
+                                this.otherPlayer = this.teamList.get(teamId).getPlayer1();
+                                this.otherPlayerNumber = 1;
+                            }
 
                             message = "You are successfully teamed with " + this.otherPlayer.getUserName()
                                     + "\nAre you ready to play?\nEnter yes when ready";
