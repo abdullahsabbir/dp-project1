@@ -90,13 +90,13 @@ public class ServerSocketTask implements Runnable {
         long startTime = System.currentTimeMillis();
         long endTime;
         while (true) {
-            remainingLength = 20 - line.length();
+            remainingLength = 80 - line.length();
             randomIndex = (int) (Math.random() * ((wordList.size() - 1) - 0 + 1) + 0);
             if (wordList.get(randomIndex).length() <= remainingLength) {
                 line = line + wordList.get(randomIndex) + " ";
             }
 
-            if (20 - line.length() == 0) {
+            if (80 - line.length() == 0) {
                 break;
             }
             endTime = System.currentTimeMillis();
@@ -410,7 +410,6 @@ public class ServerSocketTask implements Runnable {
                                             System.out.println("breaking from 1st player, player number 1");
                                             break;
                                         } else {
-                                            System.out.println("waiting from 1st player, player number 1");
                                             try {
                                                 Thread.sleep(100);
                                             } catch (InterruptedException e) {
@@ -424,10 +423,8 @@ public class ServerSocketTask implements Runnable {
 
                                     while (true) {
                                         if (this.teamList.get(this.teamId).getPlayer1finished() == 1) {
-                                            System.out.println("breaking from 1st player, player number 2");
                                             break;
                                         } else {
-                                            System.out.println("waiting from 1st player, player number 2");
                                             try {
                                                 Thread.sleep(100);
                                             } catch (InterruptedException e) {
@@ -444,11 +441,8 @@ public class ServerSocketTask implements Runnable {
                                             myTeam = this.teamList.get(teamId);
                                             myTeam.setPlayer2finished(1);
                                             this.teamList.replace(teamId, myTeam);
-
-                                            System.out.println("breaking from 2nd player, player number 1");
                                             break;
                                         } else {
-                                            System.out.println("waiting from 2nd player, player number 2");
                                             try {
                                                 Thread.sleep(100);
                                             } catch (InterruptedException e) {
@@ -463,11 +457,8 @@ public class ServerSocketTask implements Runnable {
                                             myTeam = this.teamList.get(teamId);
                                             myTeam.setPlayer1finished(1);
                                             this.teamList.replace(teamId, myTeam);
-
-                                            System.out.println("breaking from 2nd player, player number 1");
                                             break;
                                         } else {
-                                            System.out.println("waiting from 2nd player, player number 1");
                                             try {
                                                 Thread.sleep(100);
                                             } catch (InterruptedException e) {
