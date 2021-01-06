@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +24,6 @@ public class Server{
     private static List<String> wordList;
 
     public static void main(String args[]) throws IOException {       //Changed IOException to Exception
-        wordList = Files.readAllLines(Paths.get("D:\\Java Codes\\CI3.04\\Project1\\Server", "src\\wordlist.txt"));
 
         int port = 1000;
         serverSocket = new ServerSocket(port);

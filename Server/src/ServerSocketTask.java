@@ -83,7 +83,7 @@ public class ServerSocketTask implements Runnable {
     }
 
     private String generateLine() throws IOException {
-        this.wordList = Files.readAllLines(Paths.get("D:\\Java Codes\\CI3.04\\Project1\\Server", "src\\wordlist.txt"));
+        this.wordList = Files.readAllLines(Paths.get("src\\wordlist.txt"));
         String line = "";
         int randomIndex;
         int remainingLength;
