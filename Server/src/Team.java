@@ -12,6 +12,7 @@ public class Team {
     private int startingPlayer;
     private HashMap<String, Team> teamList = new HashMap<>();
 
+    // Generating a random ID for the team
     private void generateRandomId() {
         String randomId = String.valueOf(Math.random() * (999 - 1 + 1) + 1);
 
@@ -25,6 +26,7 @@ public class Team {
         }
     }
 
+    // Randomly selecting which player will start the game first
     private void determineStartingPlayer() {
         int randomPlayerNumber = (int)(Math.random() * (2 - 1 + 1) + 1);
 
@@ -43,6 +45,7 @@ public class Team {
         }
     }
 
+    // Method to set counter in the player is ready or not
     public void makePlayerReady(int playerNumber) {
         if(playerNumber == 1) {
             this.player1ReadyStatus = 1;
