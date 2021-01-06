@@ -109,6 +109,7 @@ public class ClientSocketTask implements Runnable {
                                     }
                                     System.out.println(joinReply);
                                     stringInput = scanner.next();
+                                    // Asking client if he is ready
                                     if(stringInput.equals("yes")) {
                                         request = new Request("ready");
                                         out.writeObject(this.request);
@@ -141,7 +142,7 @@ public class ClientSocketTask implements Runnable {
                                     scanner.nextLine();
                                     stringInput = scanner.nextLine();
                                     if(this.gameLine.equals(stringInput)) {
-                                        System.out.println("Waiting for server to finish up...");
+                                        System.out.println("Waiting for the other player to finish up...");
                                         request = new Request("done");
                                         out.writeObject(this.request);
                                         out.flush();
@@ -163,11 +164,8 @@ public class ClientSocketTask implements Runnable {
                                             break;
                                         }
                                         System.out.println(joinReply);
-
                                     }
-
                                     break;
-
                                 } else {
                                     System.out.println("Invalid Command. Please enter the number of the command");
                                 }
@@ -186,7 +184,6 @@ public class ClientSocketTask implements Runnable {
                 } else {
                     System.out.println(reply);
                 }
-
                 in.close();
                 out.close();
             }

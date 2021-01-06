@@ -116,7 +116,6 @@ public class ServerSocketTask implements Runnable {
 
     // Method for the actual gameplay
     private void play(ObjectOutputStream out, ObjectInputStream in, UserInfo player) throws IOException {
-        
         HashMap<String, Double> tempHashMap = new HashMap<>();
         // Sending a countdown to the clint
         reply = new Reply("3");
@@ -178,7 +177,7 @@ public class ServerSocketTask implements Runnable {
         if (request.getOperationType().equals("done")) {
             timeTaken = endTime - startTime;
             this.recordBoard.put(player.getUserName(), (double) timeTaken / 1000);
-        } else {    // If the request is not "done", that means client entered the text wrong, so putting the timeTaken as maximum value possible
+        } else {    // If the request is not "done", that means client entered the text wrong, so basically doing nothing/not adding it to the recordboard
             timeTaken = 999999L;
         }
         // Checking first if the player has any previous record
